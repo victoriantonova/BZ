@@ -1,0 +1,192 @@
+﻿
+@{
+    ViewBag.Title = "AppointmentView";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "get",
+            url: "/Admin/getBookedAppointmentlist",
+            success: function (data) {
+                $("#bookedappointmentlist").html(data);
+            }
+        });
+
+        $("#cpl").click(function () {
+           
+            $.ajax({
+                type: "get",
+                url: "/Admin/getCancelAppointmentlist",
+                success: function (data) {
+                    $("#Cancelappointmentlist").html(data);
+                }
+            });
+
+        });
+
+        $("#spl").click(function () {
+
+
+            $.ajax({
+                type: "get",
+                url: "/Admin/getServicedoneAppointmentlist",
+                success: function (data) {
+                    $("#servicedoneappointmentlist").html(data);
+                }
+            });
+
+
+        });
+
+
+    });
+
+    function updateServicedone(apid,subsid)
+    {
+
+        
+        $.ajax({
+            type: "get",
+            url: "/Admin/GetBookedServicedone",
+            data:{id: apid,sid: subsid},
+            success: function (data) {
+               // $("#Cancelappointmentlist").html(data);
+            }
+        });
+        
+
+
+        $("#servicedone"+subsid).html('done');
+    }
+</script>
+<style>
+
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+    
+#exTab1 .tab-content {
+  color : white;
+  background-color: #428bca;
+  padding : 5px 15px;
+}
+
+#exTab2 h3 {
+  color : white;
+  background-color: #428bca;
+  padding : 5px 15px;
+}
+
+/* remove border radius for the tab */
+
+#exTab1 .nav-pills > li > a {
+  border-radius: 0;
+}
+
+/* change border radius for the tab , apply corners on top*/
+
+#exTab3 .nav-pills > li > a {
+  border-radius: 4px 4px 0 0 ;
+}
+
+#exTab3 .tab-content {
+  color : white;
+  background-color: #428bca;
+  padding : 5px 15px;
+}
+
+.bookmenu{
+
+    border:1px solid red;
+    padding:10px;
+
+}
+
+</style>
+
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Manage Appointment </li>
+    </ol>
+    <!-- Example DataTables Card-->
+
+
+
+</div>
+
+
+
+<div class="container"></div>
+<div id="exTab1" class="container">
+    <ul class="nav nav-pills">
+        <li class="active bookmenu">
+            <a href="#1a" data-toggle="tab" id="bpl">View Booked Appointments</a>
+        </li>
+        <li class="bookmenu">
+            <a href="#2a" data-toggle="tab" id="spl">View Previous Appointment List</a>
+        </li>
+        <li class="bookmenu">
+            <a href="#3a" data-toggle="tab" id="cpl">View Cancelled Appointment List </a>
+        </li>
+       
+    </ul>
+
+    <div class="tab-content clearfix">
+        <div class="tab-pane active" id="1a">
+            <div id="bookedappointmentlist">
+
+
+
+
+                #
+
+
+
+            </div>
+        </div>
+        <div class="tab-pane" id="2a">
+            <div id="servicedoneappointmentlist">
+
+
+
+            </div>
+        </div>
+        <div class="tab-pane" id="3a">
+            <div id="Cancelappointmentlist">
+
+
+
+            </div>
+        </div>
+      
+    </div>
+</div>
+
+
+
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+
+
+
+
+

@@ -1,0 +1,214 @@
+﻿
+@{
+    ViewBag.Title = "Customerview";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+
+    $(document).ready(function () {      
+        $.ajax({
+            type: "get",
+            url: "/Admin/getCustomerList",
+            success: function (data) {
+                $("#customerlist").html(data);
+            }
+        });
+    });
+
+    //for change status 
+    function getchangestatus(id)
+    {     
+        var result = confirm("Do you want to change status ?");
+        if (result) {
+            $.ajax({
+                type: "get",
+                url: "/Admin/getChangeStatus",
+                data: { cid: id },
+                success: function (response) {
+                    $.ajax({
+                        type: "get",
+                        url: "/Admin/getCustomerList",
+                        success: function (data) {
+                            $("#customerlist").html(data);
+                        }
+                    });
+                   
+                }
+            });
+        }
+    }
+    //for delete customer 
+    function getdelete(id)
+    {
+        var result = confirm("are you sure to delete Record?");
+        if (result) {
+            $.ajax({
+                type: "get",
+                url: "/Admin/DeleteCustomer",
+                data: { cid: id },
+                success: function (response) {
+
+                    $.ajax({
+                        type: "get",
+                        url: "/Admin/getCustomerList",
+                        success: function (data) {
+                            $("#customerlist").html(data);
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+
+ function CheckForm() {
+        var txt1 = document.getElementById('subject');
+        if (txt1.value == '') {
+            alert("Enter Subject Name !")
+            document.getElementById("subject").focus();
+            return false;
+        }
+
+        var txt2 = document.getElementById('message');
+        if (txt2.value == '') {
+            alert("Enter message  !")
+            document.getElementById("message").focus();
+            return false;
+        }
+
+
+        var checked = false;
+        var checkedValue = null;
+        var elements = document.getElementsByName("sel[]");
+        for (var i = 0; i < elements.length; i++) {
+            if (elements[i].checked) {
+                checked = true;
+                checkedValue = elements[i].value;              
+                $.ajax({
+                    type: "get",
+                    url: "/Admin/SendEmailtoCustomers",
+                    data: { sub: txt1.value, msg: txt2.value, uid: checkedValue },
+                    success: function (data) {
+                        //$("#customerlist").html(data);
+                    }
+                });                
+            }
+        }
+        alert("Your Message delivery to selected customer successfully ...................");
+
+        if (!checked) {
+            alert('Please select at Least one customer !!!!!!!!!!');
+        }
+        return checked;
+    }
+
+
+
+</script>
+
+
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Manage Customer</li>
+    </ol>
+    <!-- Example DataTables Card-->
+
+
+
+</div>
+
+<div class="container" style="border:2px solid red;">
+
+    <div class="row">
+
+        <div class="col-md-12">
+
+          <p><h2>Customer List </h2></p>
+
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12">
+            <br />
+            <br />
+           <div id="customerlist">
+
+           </div>
+
+
+        </div>
+
+    </div>
+    <div class="row">
+
+
+        <div class="col-md-12">
+
+            <button  onclick="CheckForm()">Send Email to  Seleccted Customers</button>
+
+        </div>
+
+
+
+
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3" id="form_container">
+            <h2></h2>
+            <p>
+               
+            </p>
+            <div role="form" method="post" id="reused_form">
+
+                <div class="row">
+                    <div class="col-sm-6 form-group">
+                        <label for="name">
+                            Subject:
+                        </label>
+                        <input type="text" class="form-control" id="subject" name="subject" required>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                       
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <label for="message">
+                            Message:
+                        </label>
+                        <textarea class="form-control" type="textarea" name="message" id="message" maxlength="6000" rows="7"></textarea>
+                    </div>
+                </div>
+                
+
+
+               
+
+            </div>
+            <div id="success_message" style="width:100%; height:100%; display:none; ">
+                <h3>Posted your message successfully!</h3>
+            </div>
+            <div id="error_message"
+                 style="width:100%; height:100%; display:none; ">
+                <h3>Error</h3>
+                Sorry there was an error sending your form.
+
+            </div>
+        </div>
+    </div>
+
+
+
+</div>

@@ -1,0 +1,473 @@
+﻿@model IEnumerable<BeautyBusiness.Models.ServiceCart>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+
+    input[type="radio"]{
+  width: 30px; /*Desired width*/
+  height: 30px; /*Desired height*/
+}
+
+    [type="date"] {
+  background:#fff url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)  97% 50% no-repeat ;
+}
+[type="date"]::-webkit-inner-spin-button {
+  display: none;
+}
+[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
+
+/* custom styles */
+body {
+  padding: 4em;
+
+  font: 13px/1.4 Geneva, 'Lucida Sans', 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif;
+}
+label {
+  display: block;
+}
+input {
+  border: 1px solid #c4c4c4;
+  border-radius: 5px;
+  background-color: #fff;
+  padding: 3px 5px;
+  box-shadow: inset 0 3px 6px rgba(0,0,0,0.1);
+  width: 190px;
+}
+
+
+
+    table {  
+    color: #333; /* Lighten up font color */
+    font-family: Helvetica, Arial, sans-serif; /* Nicer font */
+    width: 1100px; 
+    border-collapse: 
+    collapse; border-spacing: 0; 
+}
+
+td, th { border: 1px solid #CCC; height: 30px; } /* Make cells a bit taller */
+
+th {  
+    background: #F3F3F3; /* Light grey background */
+    font-weight: bold; /* Make sure they're bold */
+}
+
+td {  
+    background: #FAFAFA; /* Lighter grey background */
+    text-align: center; /* Center our text */
+}
+
+
+
+
+
+    clock-container {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  margin: 20px 0;
+}
+
+.pie {
+  height: 50%;
+  width: calc(50% - 2px);
+  background: rgb(11, 139, 114);
+  display: block;
+  float: left;
+  margin-right: 2px !important;
+  margin-bottom: 2px !important;
+  cursor: pointer;
+  -webkit-transition: all 300ms cubic-bezier(.45, -0.6, .52, 1.6);
+  transition: all 300ms cubic-bezier(.45, -0.6, .52, 1.6);
+  color: #fff;
+  position: relative;
+}
+
+.pie:hover {
+  background: #fff;
+  color: #16a085;
+}
+
+.pie span {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+}
+
+.pie-morning {
+  border-top-left-radius: 100%;
+}
+
+.pie-morning span {
+  bottom: 15px;
+}
+
+#radio-morning:checked ~ .clock-container .pie-morning {
+  -webkit-transform: scale(1.05) translate(-10px, -10px);
+  transform: scale(1.05) translate(-10px, -10px);
+  background: #fff;
+  color: #16a085;
+}
+
+.pie-afternoon {
+  border-top-right-radius: 100%;
+}
+
+.pie-afternoon span {
+  bottom: 15px;
+}
+
+#radio-afternoon:checked ~ .clock-container .pie-afternoon {
+  -webkit-transform: scale(1.05) translate(10px, -10px);
+  transform: scale(1.05) translate(10px, -10px);
+  background: #fff;
+  color: #16a085;
+}
+
+.pie-evening {
+  border-bottom-right-radius: 100%;
+}
+
+.pie-evening span {
+  top: 15px;
+}
+
+#radio-evening:checked ~ .clock-container .pie-evening {
+  -webkit-transform: scale(1.05) translate(10px, 10px);
+  transform: scale(1.05) translate(10px, 10px);
+  background: #fff;
+  color: #16a085;
+}
+
+.pie-night {
+  border-bottom-left-radius: 100%;
+}
+
+.pie-night span {
+  top: 15px;
+}
+
+#radio-night:checked ~ .clock-container .pie-night {
+  -webkit-transform: scale(1.05) translate(-15px, 15px);
+  transform: scale(1.05) translate(-10px, 10px);
+  background: #fff;
+  color: #16a085;
+}
+
+.time-picker-container {
+  position: relative;
+  width: 450px;
+  margin:100px auto;
+}
+
+.time-picker-container input[type="radio"] {
+  display: none;
+}
+
+h2.time-display {
+  margin: 0;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 50%;
+  overflow: hidden;
+  height: 40px;
+  background: rgb(11, 139, 114);
+  padding: 10px;
+  text-align: center;
+  font-weight: bold !important;
+  line-height: 40px;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+span.time-display-inner {
+  display: block;
+  -webkit-transition: all 300ms ease-in-out;
+  transition: all 300ms ease-in-out;
+}
+
+.time-display-inner span {
+  display: block;
+}
+
+#radio-morning:checked ~ .time-display .time-display-inner {
+  -webkit-transform: translateY(0);
+  transform: translateY(0);
+}
+
+#radio-afternoon:checked ~ .time-display .time-display-inner {
+  -webkit-transform: translateY(-39px);
+  transform: translateY(-39px);
+}
+
+#radio-evening:checked ~ .time-display .time-display-inner {
+  -webkit-transform: translateY(-81px);
+  transform: translateY(-81px);
+}
+
+#radio-night:checked ~ .time-display .time-display-inner {
+  -webkit-transform: translateY(-120px);
+  transform: translateY(-120px);
+}
+
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+</style>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        //Appointment confirmation 
+        $("#appointmentconfirm").click(function () {
+
+            var radioValue = $("input[name='timeslot']:checked").val();
+            var apdate = $("#appointmentdate").val();                                
+            var subsid = $("#subserviceID").val();
+           
+
+            // alert(apdate);
+
+            var dateObj = new Date();
+            var month = dateObj.getUTCMonth() + 1; //months from 1-12
+            var day = dateObj.getUTCDate();
+            var year = dateObj.getUTCFullYear();
+
+           // newdate = year + "/" + month + "/" + day;
+
+           
+            
+            var sdate = apdate.split("-");
+          //  alert(sdate[0]);
+           // alert(sdate[1]);
+            //  alert(sdate[2]);
+          //  alert(sdate);
+            if (sdate=="")
+            {
+                alert("Please choose a date for your appointment");
+            }
+
+            if (sdate[0] >= year)
+            {
+                if(sdate[1]>=month)
+                {
+                    if(sdate[2]>day)
+                    {
+                        if (radioValue) {
+
+
+                            //submit Appoint to server 
+                            $.ajax({
+                                type: "get",
+                                url: "/BookAppointment/SaveAppointment",
+                                data: { adate: apdate,tid:radioValue},
+                                success: function (data) {
+                                    //$("table").html(data);
+
+                                    window.location.replace("http://localhost:65394/CustomAccount/Index/");
+
+                                }
+
+                            });
+
+                        }
+                        else
+                        {
+                            alert("Please Choose Time Slot :");
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        alert("You have chosen an invalid date, please try again");
+                        return false;
+                    }
+                }
+            }
+
+
+
+         
+
+           
+            
+
+
+
+
+        });
+
+       
+       
+
+    });
+
+    
+ 
+</script>
+
+
+<main class="main-content">
+    <div class="page">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-12">
+                    <br />
+                    <br />
+
+                    <a href="/customerService/Index/">Back to  Service List </a>
+                    <br />
+                    <br />
+                    <table class="table" style="width:1100px;border:1px solid white;" >
+
+                        <tr><th> Cart ID </th><th>Service Id</th><th> Service Name </th><th>Cost </th> <th>Duration(H)</
+                            th><th>Action </th></tr>
+
+                        <!--<tr>
+                            <th>Cart Id</th>
+                            <th>Service Id</th>
+                            <th>Service Name</th>
+                            <th>Cost</th>
+                            <th>Duration(H)</th>
+                            <th></th>
+
+                        </tr>-->
+
+                @foreach (var item in Model)
+                {
+                    
+                    <tr style="width:1100px;" >
+
+                        <td  style="width:150px;">@item.CartID
+                        
+                        <input type="hidden" id="cartid1" value="@item.CartID" />
+                        </td>
+                        <td>@item.subServiceId
+                      
+                        <input type="hidden" id="subserviceID" value="@item.subServiceId" />
+                        </td>
+                        <td>@item.SubServiceName</td>
+                        <td>£ @item.Cost</td>
+                        <td>@item.duration hr/s</td>
+                        <td>
+                            @Html.ActionLink("Remove", "RemoveCartService", new { id = item.CartID })
+                        </td>
+
+                    </tr>
+                    
+                }
+
+                    </table>
+
+
+               
+
+                
+
+
+
+                </div>
+
+
+            </div>
+            
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <br />
+                    <br />
+
+                    <table id="tbl"  style="width:1100px;border:1px solid white;">
+                        <thead>
+                            <tr>
+                                <td>Time Slot</td>
+                                <td>(9-11)AM</td>
+                                <td>(11-1)PM</td>
+                                <td>(2-4)PM</td>
+                                <td>(4-6)PM</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                Select 
+                                </td>
+                                <td><input id="timeslot" type="radio" name="timeslot" value="1" />   </td>
+                                <td><input id="timeslot" type="radio" name="timeslot" value="2" /> </td>
+                                <td><input id="timeslot" type="radio" name="timeslot" value="3" /> </td>
+                                <td><input id="timeslot" type="radio" name="timeslot" value="4" /> </td>
+                            </tr>
+                        </table>
+
+                </div>
+              
+
+
+            </div>
+
+
+
+            <div class="row">
+               
+                <div class="col-md-12">
+
+                    <br />
+                    <br />
+                    <table id="tbl"  style="width:1100px;border:1px solid white;">
+
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Choose Appointment Date 
+                                </td>
+
+                                <td><input type="date" name="appointmentdate" id="appointmentdate"></td>
+                            </tr>
+                    </table>
+                </div>                                                            
+                </div>
+            <div class="row">
+
+                <div class="col-md-12">
+                    <br />
+                    <br />
+                    <button id="appointmentconfirm" class="button">Confirm AppointMent </button>
+
+                </div>
+
+            </div>
+            </div>
+
+              
+           
+          
+           
+        </div>
+</main>
+
+<div style="margin-top:200px;">
+
+
+</div>
+

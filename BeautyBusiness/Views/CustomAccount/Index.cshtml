@@ -1,0 +1,237 @@
+﻿@model IEnumerable<BeautyBusiness.Models.ServiceAppointment>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    hr {
+        display: block;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+        margin-left: auto;
+        margin-right: auto;
+        border-style: dashed;
+        border-width: 4px;
+        border-radius: 12px;
+    }
+
+    th, td {
+        padding: 15px;
+        text-align: left;
+    }
+
+   
+
+
+
+</style>
+
+
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+<script>
+
+    $(document).ready(function(){
+
+        $("#cancel").hide();
+        $("#list").hide();
+
+        $("#btncancel").click(function () {
+            $("#cancel").show();
+            $("#list").hide();
+        });
+
+        $("#btnshow").click(function () {
+
+            $("#cancel").hide();
+            $("#list").show();
+        })
+
+    });
+
+
+
+
+    function cancelAppointment(id) {
+        var reason = $("#txtreason").val();
+
+        if (reason == "") {
+            reason = "Nothing";
+        }
+
+        $.ajax({
+            type: "get",
+            url: "/BookAppointment/CancelAppointment",
+            data: { appid: id, r: reason },
+            success: function (data) {
+
+                window.location.replace("http://localhost:65394/CustomAccount/Index/");
+
+            }
+        });
+
+    }
+
+</script>
+
+<main class="main-content">
+    <div class="page">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-12">
+
+                    <button id="btncancel" class="btn btn-success" 
+                            
+                            style="background-color: #4CAF50;
+                            border: none;
+                            color: white;
+                            padding: 15px 32px;
+                            text-align: center;
+                            text-decoration: none;
+                            display: inline-block;
+                            font-size: 16px;
+                            margin: 4px 2px;
+                            cursor: pointer;
+                            border-radius: 12px;" 
+
+                            
+                            >Show Cancelled Appointments</button>
+
+                    <button id="btnshow" class="btn btn-info"
+                            
+                            style="background-color: #4CAF50;
+                            border: none;
+                            color: white;
+                            padding: 15px 32px;
+                            text-align: center;
+                            text-decoration: none;
+                            display: inline-block;
+                            font-size: 16px;
+                            margin: 4px 2px;
+                            cursor: pointer;
+                            border-radius: 12px;" 
+                            
+                            
+                            
+                            >Show Upcomimg Appointment Details</button>
+                    <br /><br /><br /><br />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div id="list">
+
+                        @foreach (var item in Model)
+                        {
+                            if (item.appintmentstatus != "yes")
+                            {
+                                <h2>Service Appointment Details:-</h2>
+                                <table style="width:1100px;border:5px solid white; ">
+
+
+                                    <tr>
+
+                                        <th>ServiceName</th>
+                                        <th>Cost</th>
+                                        <th>Duration</th>
+                                        <th>Appointment Date</th>
+                                        <th>Appointment Time</th>
+                                    </tr>
+
+                                    @foreach (var item1 in item.subservicecart)
+                                    {
+                                        <tr>
+                                            <th>@item1.SubServiceName</th>
+                                            <th>£ @item1.Cost</th>
+                                            <th>@item1.duration hr/s</th>
+                                            <td>@item.App_date</td>
+                                            <td>@item.timeslot</td>
+
+                                        </tr>
+
+                                    }
+
+                                    <tr>
+                                        <td>Reason for cancellation </td>
+                                        <td><input type="text" id="txtreason" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <button onclick="cancelAppointment(@item.App_Id)">Cancel Appointment</button>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                    <br />
+                                    <br />
+
+                                    <hr />
+                                    <br />
+
+                            }
+                        }
+
+
+                    </div>
+                    <div id="cancel">
+
+                        @foreach (var item in Model)
+                        {
+
+                            if (item.appintmentstatus != "")
+                            {
+                                <h2>Cancelled Appointment:-</h2>
+
+                                @*<table style="width:1100px">*@
+                                <table style="width:1100px;border:5px solid white;">
+
+                                    <tr>
+                                        @*<td>Appointment ID:</td>
+                                        <td>
+                                            @item.App_Id
+
+                                            <input type="hidden" id="appid" value="@item.App_Id" />
+                                        </td>*@
+                                    </tr>
+                                    <tr>
+                                        <td>Appointment Date:</td>
+                                        <td>@item.App_date</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Time:
+                                        </td>
+                                        <td>@item.timeslot</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>Appointment Status</td>
+                                        <td>Cancelled</td>
+
+                                    </tr>
+                                </table>
+
+
+                            }
+
+
+
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+

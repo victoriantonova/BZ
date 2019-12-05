@@ -1,0 +1,604 @@
+﻿@model IEnumerable<BeautyBusiness.Models.Service>
+@{
+    ViewBag.Title = "serviceview";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+
+        $("#editservice").hide();
+        $("#editsubservice").hide();
+
+
+        $.ajax({
+            type: "get",
+            url: "/Admin/getSubservicelist",
+            success: function (data) {
+                $("#subservicelist1").html(data);
+            }
+        });
+
+
+
+        //Add service 
+
+        $("#btnsave").click(function () {
+
+            //
+
+            var sname = $("#txtserviceName").val();
+
+            $.ajax({
+                type: "get",
+                url: "/Admin/Addservices",
+                data: { name: sname },
+                success: function (data) {
+                    $.ajax({
+                        type: "get",
+                        url: "/Admin/getServiceList",
+                        success: function (data) {
+                            $("#ViewService").html(data);
+                        }
+                    });
+                }
+            });
+
+
+
+        });
+
+
+        $("#btnsavesubservice").click(function () {
+
+
+           
+            var cost=$("#txtcost").val();
+            var duration=$("#txtduration").val();
+            var sid = $("#subservicelist").val();
+            var subsname = $("#txtsubserviceName").val();
+
+           
+            $.ajax({
+                type: "get",
+                url: "/Admin/Addsubservices",
+                data: { 'subsname': subsname, 'cost': cost, 'duration': duration, 'sid': sid },
+                success: function (data) {
+                    $.ajax({
+                        type: "get",
+                        url: "/Admin/getSubservicelist",
+                        success: function (data) {
+                            $("#subservicelist1").html(data);
+                            $("#msg").html("Subservice Successfully Added");
+                        }
+                    });
+                }
+            });
+
+
+
+
+
+
+        });
+
+
+        $("#btneditsubservice").click(function () {
+
+            var subsid = $("#editsubserviceid").val();
+            var subsname = $("#edittxtserviceName").val();
+            var cost = $("#edittxtcost").val();
+            var duration = $("#edittxtduration").val();
+            var sid = $("#editsubservicelist").val();
+
+           
+            $.ajax({
+                type: "get",
+                url: "/Admin/editsubservices",
+                data: {'subsid':subsid, 'subsname': subsname, 'cost': cost, 'duration': duration, 'sid': sid },
+                success: function (data) {
+                    $.ajax({
+                        type: "get",
+                        url: "/Admin/getSubservicelist",
+                        success: function (data) {
+                            $("#subservicelist1").html(data);
+                            $("#editsubservice").hide();
+                        }
+                    });
+                }
+            });
+
+
+
+        });
+
+
+        //load main service 
+
+        $.ajax({
+            type: "get",
+            url: "/Admin/getServiceList",          
+            success: function (data) {
+                $("#ViewService").html(data);
+            }
+        });
+
+
+
+
+       
+          
+
+
+            $("#btnupdate").click(function () {
+
+                var id = $("#txtserviceID").val();
+                var name = $("#servicename").val();
+
+                $.ajax({
+                    type: "get",
+                    url: "/Admin/updateService",
+                    data: { sid: id,sname:name },
+                    success: function (Response) {
+
+                        $.ajax({
+                            type: "get",
+                            url: "/Admin/getServiceList",
+                            success: function (data) {
+                                $("#ViewService").html(data);
+                            }
+                        });
+                    }
+                });
+
+                $("#editservice").hide();
+                $("#txtserviceID").val();
+                $("#servicename").val();
+
+            });
+
+
+       
+    });
+
+    function deleteSubservice(subsid,sid)
+    {
+
+        var result = confirm("Do you want to Delete subservice ?");
+        if (result) {
+            $.ajax({
+                type: "get",
+                url: "/Admin/getDeleteSubservice",
+                data: { id: subsid },
+                success: function (Response) {
+
+                    $.ajax({
+                        type: "get",
+                        url: "/Admin/getSubservicelist",
+                        data: { id: sid },
+                        success: function (data) {
+                            $("#subservicelist1").html(data);
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    function deleteservice(sid)
+    {
+
+        var result = confirm("Do you want to Delete Service: ?");
+        if (result) {
+            $.ajax({
+                type: "get",
+                url: "/Admin/getDeleteservice",
+                data: { id: sid },
+                success: function (Response) {
+
+                    $.ajax({
+                        type: "get",
+                        url: "/Admin/getServiceList",
+                        success: function (data) {
+                            $("#ViewService").html(data);
+                        }
+                    });
+
+                }
+            });
+        }
+
+
+
+    }
+
+    function editSubservice(sid , ssid)
+    {
+        
+        $.ajax({
+            type: "get",
+            url: "/Admin/getsubServiceById",
+            data: { id: sid },
+            success: function (Response) {
+
+                var res = Response.split(",");
+                $("#editsubservice").show();
+                $("#edittxtserviceName").val(res[0]);
+                $("#edittxtcost").val(res[1]);
+                $("#edittxtduration").val(res[2]);
+                $("#editsubservicelist").val(res[3]);
+                $("#editsubserviceid").val(res[4]);
+                
+            }
+        });
+
+
+
+    }
+
+    function editservice(sid)
+    {
+        $("#editservice").show();
+        var sname = "";
+        $("#txtserviceID").val(sid);
+       
+        
+        $.ajax({
+            type: "get",
+            url: "/Admin/getServiceById",
+            data: { id: sid },
+            success: function (Response) {
+                $("#servicename").val(Response);
+               
+            }
+        });
+
+       
+
+
+    }
+
+
+
+</script>
+
+<style>
+    .button {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+    }
+
+    #exTab1 .tab-content {
+        color: white;
+        background-color: #428bca;
+        padding: 5px 15px;
+    }
+
+    #exTab2 h3 {
+        color: white;
+        background-color: #428bca;
+        padding: 5px 15px;
+    }
+
+    /* remove border radius for the tab */
+
+    #exTab1 .nav-pills > li > a {
+        border-radius: 0;
+    }
+
+    /* change border radius for the tab , apply corners on top*/
+
+    #exTab3 .nav-pills > li > a {
+        border-radius: 4px 4px 0 0;
+    }
+
+    #exTab3 .tab-content {
+        color: white;
+        background-color: #428bca;
+        padding: 5px 15px;
+    }
+
+    .bookmenu {
+        border: 1px solid red;
+        padding: 10px;
+    }
+</style>
+
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Service</li>
+    </ol>
+    <!-- Example DataTables Card-->
+
+
+
+</div>
+
+<div id="exTab1" class="container">
+    <ul class="nav nav-pills">
+        <li class="active bookmenu">
+            <a href="#1a" data-toggle="tab" id="bpl">Add Service</a>
+        </li>
+        <li class="bookmenu">
+            <a href="#2a" data-toggle="tab" id="spl">View Service</a>
+        </li>
+        <li class="bookmenu">
+            <a href="#3a" data-toggle="tab" id="cpl">Add Subservice</a>
+        </li>
+
+        <li class="bookmenu">
+            <a href="#4a" data-toggle="tab" id="dpl">View Subservice</a>
+        </li>
+
+    </ul>
+
+    <div class="tab-content clearfix">
+        <div class="tab-pane active" id="1a">
+            <div id="Addservice">
+
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="email">Service Name:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtserviceName" placeholder="Enter Service Name">
+                        </div>
+                    </div>
+                  
+                   
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button id="btnsave" class="btn btn-default">Save</button>
+                        </div>
+                    </div>
+                </div> 
+
+
+            </div>
+        </div>
+        <div class="tab-pane" id="2a">
+            <div id="ViewService">
+
+                list service
+
+            </div>
+        </div>
+        <div class="tab-pane" id="3a">
+            <div id="addsubservice">
+
+
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="email">SubService Name:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtsubserviceName" placeholder="Enter Service Name">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="cost"> Cost:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtcost" placeholder="Enter cost">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="duration"> Duration:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtduration" placeholder="Enter duration">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="duration">   Select Service::</label>
+                        <div class="col-sm-10">
+
+
+
+                            <select id="subservicelist">
+                                <option value="">Select Service</option>
+                                @foreach (var item in Model)
+                                {
+
+                                    <option value="@item.serviceId">@item.serviceName</option>
+
+                                }
+
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button id="btnsavesubservice" class="btn btn-default">Save</button>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <p id="msg"></p>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+
+        <div class="tab-pane" id="4a">
+            <div id="viewsubservice">
+
+                <div id="subservicelist1"></div>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+<div class="container">
+
+
+    <div class="row">
+
+        <div class="col-md-12">
+
+
+            <div id="editservice">
+
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="email">Service ID:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtserviceID" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="email">Service Name:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="servicename" >
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button id="btnupdate" class="btn btn-default">Update</button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+
+       
+
+        <div class="col-md-12">
+
+           
+            <div id="editsubservice">
+
+                <div class="form-horizontal">
+                    
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="email">SubService Name:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="editsubserviceid" readonly>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="email">SubService Name:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="edittxtserviceName" placeholder="Enter Service Name">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="cost"> Cost:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="edittxtcost" placeholder="Enter cost">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="duration"> Duration:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="edittxtduration" placeholder="Enter duration">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="duration">   Select Service::</label>
+                        <div class="col-sm-10">
+
+
+
+                            <select id="editsubservicelist">
+                                <option value="">Select Service</option>
+                                @foreach (var item in Model)
+                                {
+
+                                    <option value="@item.serviceId">@item.serviceName</option>
+
+                                }
+
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button id="btneditsubservice" class="btn btn-default">Update</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+            </div>
+
+
+
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div id="subservicelist"></div>
+        
+        </div>
+
+    </div>
+
+
+</div>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>

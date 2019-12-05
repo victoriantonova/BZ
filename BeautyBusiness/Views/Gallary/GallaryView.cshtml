@@ -1,0 +1,208 @@
+﻿@model IEnumerable<BeautyBusiness.Models.GallaryView>
+@{
+    ViewBag.Title = "GallaryView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+       .flower {
+  width: 450px;
+  padding: 110px 0;
+
+  position: relative;
+  overflow: hidden;
+  
+}
+
+.flower > .wrap {
+  background-image: url(http://media02.hongkiat.com/ww-flower-wallpapers/roundflower.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  transform: scale(1);
+  transition: transform 1.5s ease-in-out;
+  z-index: -1;
+}
+
+.flower:hover > .wrap {
+      margin: 0;
+  height: 100%;
+}
+
+</style>
+
+
+<main class="main-content">
+    <div class="page">
+        <div class="container">
+            <div class="text-center">
+                <div class="filter-links filterable-nav">
+                    <select class="mobile-filter">
+                        <option value="*">Show all</option>
+                        <option value=".hair">hair</option>
+                        <option value=".manicure">Nails</option>                      
+                        <option value=".face">Eyebrow</option>
+                       
+                    </select>
+                    <a href="#" class="current wow fadeInRight" data-filter="*">Show all</a>
+                    <a href="#" class="wow fadeInRight" data-wow-delay=".2s" data-filter=".hair">hair</a>
+                    <a href="#" class="wow fadeInRight" data-wow-delay=".4s" data-filter=".manicure">Nails</a>                    
+                    <a href="#" class="wow fadeInRight" data-wow-delay=".8s" data-filter=".face">Eyebrows</a>
+                   
+                </div>
+            </div>
+            <div class="filterable-items" id="data">
+               
+                @foreach (var item in Model)
+                {
+                    string str = string.Empty;
+                    if (item.ServiceName == "Hair")
+                    {
+                        str = "hair";
+                    }
+                    else if (item.ServiceName == "Eyebrows")
+                    {
+                        str = "face";  //face - Eyebrows
+                    }
+                    else if (item.ServiceName == "Nails")
+                    {
+                        str = "manicure";  //manicure-  Nails
+                    }
+
+                  
+                      <div class="gallery-item filterable-item @str">
+                        <a id="thumb" class="thumb1" href="/Home/RetrieveImage/@item.ImageId" alt="">
+
+                            <figure class="featured-image">
+                                <img src="/Home/RetrieveImage/@item.ImageId" alt="">
+                                <figcaption>
+                                    <h2 class="gallery-title">@*@item.SubServiceName*@</h2>
+                                    <p>@item.ImageName</p>
+                                </figcaption>
+                            </figure>
+                        </a>
+                    </div>
+
+
+
+
+
+                @*<div class="gallery-item filterable-item @str">
+                    <a href="/Home/RetrieveImage/@item.ImageId" alt="">
+                        
+                        <figure class="featured-image">
+                            <img src="/Home/RetrieveImage/@item.ImageId" alt="">
+                            <figcaption>
+                                <h2 class="gallery-title">@item.SubServiceName</h2>
+                                <p>@item.ImageName</p>
+                            </figcaption>
+                        </figure>
+                    </a>
+                </div>*@
+
+                    @*<div class="flower @str">
+                        <a href="/Home/RetrieveImage/@item.ImageId" alt="">
+
+                            <figure class="featured-image">
+                                <img src="/Home/RetrieveImage/@item.ImageId"alt="" style="border: #000000 6px ridge" ;>
+                                <figcaption>
+                                    @*<h2 class="gallery-title">@item.SubServiceName</h2>
+                                    <p style="text-align:center">@item.ImageName<p/>
+                                </figcaption>
+                            </figure>
+                        </a>
+                    </div>*@
+
+
+
+
+                }
+
+            </div>
+        </div>
+    </div>
+</main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+
+<main class="main-content">
+    <div class="page">
+        <div class="container">
+            <div class="text-center">
+                <div class="filter-links filterable-nav">
+                    <select class="mobile-filter">
+                        <option value="*">Show all</option>
+                        <option value=".hair">hair</option>
+                        <option value=".manicure">manicure</option>
+                        <option value=".pedicure">pedicure</option>
+                        <option value=".face">face</option>
+                        <option value=".makeup">makeup</option>
+                    </select>
+                    <a href="#" class="current wow fadeInRight" data-filter="">Show all</a>
+                    <a href="#" class="wow fadeInRight" data-wow-delay=".2s" data-filter=".hair">hair</a>
+                    <a href="#" class="wow fadeInRight" data-wow-delay=".4s" data-filter=".manicure">manicure</a>
+                    <a href="#" class="wow fadeInRight" data-wow-delay=".6s" data-filter=".pedicure">pedicure</a>
+                    <a href="#" class="wow fadeInRight" data-wow-delay=".8s" data-filter=".face">face</a>
+                    <a href="#" class="wow fadeInRight" data-wow-delay="1s" data-filter=".makeup">makeup</a>
+                </div>
+            </div>
+            <div class="filterable-items">
+
+
+
+
+            </div>
+        </div>
+    </div>
+</main>
+
+    -->

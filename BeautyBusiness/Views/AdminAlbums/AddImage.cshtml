@@ -1,0 +1,158 @@
+﻿@model BeautyBusiness.Models.AlbumMaster
+
+@{
+    ViewBag.Title = "AddImage";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Manage Customer</li>
+    </ol>
+    <!-- Example DataTables Card-->
+
+
+
+</div>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        $.ajax({
+            type: "get",
+            url: "/AdminAlbums/getServiceList",           
+            success: function (data) {
+                $("#servicelist").html(data);
+            }
+        });
+
+
+        $("#servicelist").change(function () {
+
+
+            var sid = $("#servicelist").val();
+
+            $.ajax({
+                type: "get",
+                url: "/AdminAlbums/getSubServiceList",
+                data:{ id : sid },
+                success: function (data) {
+                    $("#subservicelist").html(data);
+                }
+            });
+
+        });
+
+
+    });
+
+
+
+    function ValidateForm() {
+        var txt1 = document.getElementById('ImageName');
+        if (txt1.value == '') {
+            alert("Enter Image Name !")
+            document.getElementById("ImageName").focus();
+            return false;
+        }
+
+        var txt2 = document.getElementById('subservicelist');
+        if (txt2.value == '') {
+            alert("Please select Image category or Sub category  !")
+            document.getElementById("subservicelist").focus();
+            return false;
+        }
+
+
+        var uploadfile = document.getElementById('ImageData');
+
+        if (uploadfile.value == '') {
+            alert('Please upload the attachment');
+            uploadfile.focus();
+            return false;
+        }
+
+        var fname = uploadfile.value;
+        var ext = fname.split(".");
+        var x = ext.length;
+        var extstr = ext[x - 1].toLowerCase();
+        if (extstr == 'jpg' || extstr == 'jpeg' || extstr == 'png' || extstr == 'gif') { }
+        else {
+            alert("Please upload valid image");
+            uploadfile.focus();
+            return false;
+        }
+
+        alert("Image uploaded sucessfully");
+    }
+</script>
+
+
+
+<div class="container" style="border:2px solid red;">
+    <h2>Add Album</h2>
+   
+
+@using (Html.BeginForm("AddImage", "AdminAlbums", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+{
+
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="email">Image Name:</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="ImageName" placeholder="Enter Image Name" name="ImageName">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="email">Image </label>
+        <div class="col-sm-10">
+            <input type="file" class="form-control" id="ImageData" placeholder="select Image" name="ImageData">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="email">Select Service </label>
+        <div class="col-sm-10">
+           
+            <select id="servicelist" name="servicelist"></select>
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="email">Select Sub Service </label>
+        <div class="col-sm-10">
+
+            <select id="subservicelist" name="subservicelist"></select>
+
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <input type="submit" name="submit" value="Upload" onclick="return ValidateForm()" />
+        </div>
+    </div>
+
+}          
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <br />
+            <br />
+            <a href="/AdminAlbums/Index?class=btn%20btn-info" class="btn btn-info">Back to AlbumList</a>
+        </div>
+    </div>
+</div>
+

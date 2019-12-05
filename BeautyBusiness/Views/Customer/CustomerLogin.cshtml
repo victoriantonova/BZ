@@ -1,0 +1,141 @@
+﻿@model BeautyBusiness.Models.customerlogin
+
+@{
+    ViewBag.Title = "CustomerLogin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 12px;
+    }
+
+
+    form input:not([type="submit"]), form textarea { 
+    padding: 20px 20px; background: none; display: block; border: 2px solid #2c282c; color: white; }
+</style>
+
+
+
+<main class="main-content">
+    <div class="page">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <br />
+                    <br />
+                    <h2>
+                    @if(Session["error"]!=null)
+                    {
+                        var str = Session["error"].ToString();
+                        <span>@str</span><br />
+                    }
+                      
+
+                        @if (Session["errormsg"] != null)
+                        {
+                            var strmsg = Session["errormsg"].ToString();
+                            <span>@strmsg</span>
+                        }
+
+                </h2> 
+
+                    @using (Html.BeginForm("CustomerLogin", "Customer", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+                            <h4>Customer Login</h4>
+                            
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", style = "width:450px;color:white;"  } })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", style = "width:450px;color:white;" } })
+                                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <br />
+                                    <br />
+                                    <input type="submit" value="Login" class="button" />
+                                    <div class="col-md-12">
+                                        <h2></h2><a href="/admin/login/"><p>Click here for admin login</p></a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                               
+                                <div class="col-md-12">
+                                   <h2>New Customer ?</h2>
+                                    
+                                    @*<a href="/Customer/Signup/"><h2>Click here For Registration</h2></a>*@
+                                    @*<div><input type="url" value="Create An Account" class="button" a href="/Customer/Signup" /></div>*@
+                                    @*<form method="post" id="signin" action="@Url.Action("Signup", "Customer")"/>*@
+
+                                    <a href='@Url.Action("Signup", "Customer")'>
+                                        <input type='button'  value='Create An Account' 
+                                               
+                                               style="background-color: #4CAF50;
+                                                    border: none;
+                                                    color: white;
+                                                    padding: 15px 32px;
+                                                    text-align: center;
+                                                    text-decoration: none;
+                                                    display: inline-block;
+                                                    font-size: 16px;
+                                                    margin: 4px 2px;
+                                                    cursor: pointer;
+                                                    border-radius: 12px;" />
+                                     </a>
+                                   </div>
+
+
+                            </div>
+
+                            @*<div class="form-group">
+                             
+                                <div class="col-md-12">
+                                    <h2></h2><a href="/admin/login/"><p>Click here for admin login</p></a>
+                                </div>
+                            </div>*@
+
+
+
+                           
+                        </div>
+                    }
+
+
+
+                </div>
+                </div>
+        </div>
+    </div>
+</main>
+
+
+               

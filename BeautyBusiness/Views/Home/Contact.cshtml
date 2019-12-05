@@ -1,0 +1,125 @@
+﻿@model BeautyBusiness.Models.EmailFormModel
+@{
+    ViewBag.Title = "Contact";
+    string str = "current-menu-item";
+}
+
+<style>
+    .button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+
+
+</style>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <script>
+    
+        //Google Map
+
+    function myMap() {
+        var myCenter = new google.maps.LatLng(53.167203, -3.141903);
+        var mapCanvas = document.getElementById("map");
+        var mapOptions = { center: myCenter, zoom: 15 };
+        var map = new google.maps.Map(mapCanvas, mapOptions);
+        var marker = new google.maps.Marker({ position: myCenter });
+        marker.setMap(map);
+
+        var infowindow = new google.maps.InfoWindow({
+            content: "My Address!"
+        });
+        infowindow.open(map, marker);
+    }
+
+
+
+    </script>
+
+
+
+
+
+
+    <main class="main-content">
+        <div class="page">
+            <div class="container">
+                <h2 id="msg"></h2>
+                <br />
+                <p>You can contact us by completing the form below</p>
+                <div class="row">
+
+
+                    
+
+                    <div class="col-md-5">
+                        <form action="#" class="contact-form">
+                            @Html.LabelFor(m => m.FromName, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(m => m.FromName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.FromName)
+                            </div>
+                            @Html.LabelFor(m => m.FromEmail, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(m => m.FromEmail, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.FromEmail)
+                            </div>
+
+                            @Html.LabelFor(m => m.Message, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(m => m.Message, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Message)
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" class="button" value="Send" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+
+
+
+                    <div class="col-md-6 col-md-offset-1">
+                        <div class="map-container">
+                            <div id="map" style="width:100%;height:400px"></div>
+                            <div class="address-info">
+
+                                <address>
+                                    <img src="~/Content/customer/images/icon-map-small.png" class="icon">
+                                    <p><strong>Cariad Nails</strong> - 74 High Street Mold CH7 1BH Wales</p>
+                                </address>
+
+                                <div class="contact-info">
+                                    <a href="mailto:Cariadnail123@gmail.com" class="mail"><img src="~/Content/customer/images/icon-envelope-small.png" class="icon">Cariadnail123@gmail.comm</a>
+                                    <a href="tel:01352 752323" class="phone"><img src="~/Content/customer/images/icon-phone-small.png" class="icon">01352 752323</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </main>
+}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADfTHtVDFxQpeo8S89LtLXr46mopf-iy4&callback=myMap"></script>
+
